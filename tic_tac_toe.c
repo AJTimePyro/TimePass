@@ -11,6 +11,7 @@
 #define ONE 1
 #define TWO 2
 #define THREE 3
+#define SIX 6
 
 // Special Characters
 const char space = ' ';
@@ -228,11 +229,9 @@ bool chkAllEqual(char lineArr[THREE]) {
     it will return Player char who won,
     but if not found then returns '0'
 */
-char chkWinner(
+char chkTwoCase(
     char box1[],
-    char box2[],
-    char box3[],
-    char box4[]
+    char box2[]
     ) {
 
     if (chkAllEqual(box1)) {
@@ -240,12 +239,6 @@ char chkWinner(
     }
     else if (chkAllEqual(box2)) {
         return box2[ZERO];
-    }
-    else if (chkAllEqual(box3)) {
-        return box3[ZERO];
-    }
-    else if (chkAllEqual(box4)) {
-        return box4[ZERO];
     }
     else {
         return '0';
@@ -262,32 +255,31 @@ char chkAllCases() {
 
     char box1[THREE];
     char box2[THREE];
-    char box3[THREE];
-    char box4[THREE];
     char res;
 
     // In Rows and Columns
     for (int a = ZERO; a < THREE; a++) {
 
-        int b;
-        for (b = ZERO; b < THREE; b++) {
+        for (int b = ZERO; b < THREE; b++) {
             box1[b] = tic_tac_toe[a][b];
             box2[b] = tic_tac_toe[b][a];
+        }
+        res = chkTwoCase(box1, box2);
+        if (res != '0') {
+            return res;
         }
     }
 
     // In Diagonals
     for (int m = ZERO; m < THREE; m++) {
-        box3[m] = tic_tac_toe[m][m];
-        box4[m] = tic_tac_toe[m][TWO - m];
+        box1[m] = tic_tac_toe[m][m];
+        box2[m] = tic_tac_toe[m][TWO - m];
     }
 
     // Check all Cases
-    res = chkWinner(
+    res = chkTwoCase(
         box1,
-        box2,
-        box3,
-        box4
+        box2
     );
 
     return res;
@@ -337,6 +329,7 @@ void game() {
 
                 result = updateArray(input, player);
                 if (result) {
+                    round++;
                     playeritr = -playeritr + ONE;   // Converts 1 to 0 & 0 to 1
                     char result = chkAllCases();
 
@@ -355,9 +348,7 @@ void game() {
             }
 
             body();
-            round++;
         }
-
     }
 }
 
